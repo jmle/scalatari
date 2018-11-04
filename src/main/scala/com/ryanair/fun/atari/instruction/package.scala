@@ -1,26 +1,22 @@
 package com.ryanair.fun.atari
 
+import com.ryanair.fun.atari.instruction.Instruction.InstructionVal
+
 package object instruction {
 
   object Instruction extends Enumeration {
 
-    abstract class InstructionVal(var command: Byte, val bodyLength: Int) extends Val {
-      def execute: Unit
-    }
+    case class InstructionVal(command: Int, instructionCommand: InstructionCommand) extends Val
 
-    val LOAD_MEMORY_POSITION = new InstructionVal(0x00, 8) {
-      override def execute: Unit = println("I am a load in memory instruction")
-    }
+    val IMMEDIATE = InstructionVal(0x00, ImmediateCommand())
 
-    val STORE_MEMORY_POSITION = new InstructionVal(0x01, 8) {
-      override def execute: Unit = print("I am a store memory instruction")
-    }
-
-    def find(instruction: Array[Byte]): InstructionVal =
-      this.values.asInstanceOf[List[InstructionVal]]
-        .find(iv => iv.command.equals(instruction(0)))
-        .orNull
+    val ZERO_PAGE = InstructionVal(0x01, ZeroPageCommand())
 
   }
+
+  def findInstructionByOperationCode(instruction: Int): InstructionCommand =
+    Instruction.values.asInstanceOf[List[InstructionVal]]
+      .find(iv => iv.command.equals(instruction))
+      .map(i => i.instructionCommand).orNull
 
 }
