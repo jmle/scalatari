@@ -1,10 +1,10 @@
-package com.ryanair.fun.atari.instruction
+package com.ryanair.fun.atari.addressing
 
 import java.io.ByteArrayInputStream
 
 import org.scalatest.FlatSpec
 
-class InstructionProcessorTest extends FlatSpec {
+class AddressingModeEnumProcessorTest extends FlatSpec {
 
   /*lazy val rom_content: Array[Byte] = Array[Byte](0x00, 0x11, 0x01, 0xFF)
 
