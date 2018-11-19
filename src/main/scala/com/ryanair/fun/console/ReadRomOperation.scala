@@ -2,6 +2,8 @@ package com.ryanair.fun.console
 
 import java.io.File
 
+import com.ryanair.fun.atari.memory.MemoryMap
+
 class ReadRomOperation(file: File) {
 
   lazy val rom: Array[Int] = {
@@ -12,6 +14,8 @@ class ReadRomOperation(file: File) {
     }
     content.toArray
   }
+
+  def loadInMemory() : Unit = MemoryMap(rom)
 
 }
 
