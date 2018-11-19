@@ -21,15 +21,18 @@ class Atari {
 
     val (operationType, addressMode) = operation.findOperation(operationCode) match {
       case Some((x, y)) => (x, y)
-      case None => throw new RuntimeException(s"Operation code $operationCode does not match any operation")
+      case None => throw new RuntimeException(s"Operation code ${operationCode.toHexString} does not match any operation")
     }
     runInstruction(operationType, addressMode)
 
     mos6502.programCounter.increment()
   }
 
-  private def runInstruction(executor: InstructionExecutor, addressMode: AddressingMode) = {
-    executor.run(addressMode)
-  }
+  private def runInstruction(executor: InstructionExecutor, addressMode: AddressingMode): Unit =
+    executor.run(addressMode.operand())
 
+
+  override def toString: String = {
+    mos6502.toString
+  }
 }

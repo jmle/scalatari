@@ -63,6 +63,46 @@ package object operation {
             case 0xF8 => AddressingModeEnum.SET_DECIMAL
           }).addressMode
       }
+
+    val LOADX_REGISTER =
+      new OperationVal("ldx", LoadRegisterX(), 0xA2, 0xA6, 0xB6, 0xAE, 0xBE) {
+        override def addressMode(operationCode: Int): AddressingMode =
+          (operationCode match {
+            case 0xA2 => AddressingModeEnum.IMMEDIATE
+            case 0xA6 => AddressingModeEnum.ZERO_PAGE
+            case 0xB6 => AddressingModeEnum.ZERO_PAGE_Y
+            case 0xAE => AddressingModeEnum.ABSOLUTE
+            case 0xBE => AddressingModeEnum.ABSOLUTE_Y
+          }).addressMode
+      }
+
+    val LOAD_ACCUMULATOR =
+      new OperationVal("lda", LoadAccumulatorInstruction(), 0xA9, 0xA5, 0xB5, 0xAD, 0xBD, 0xB9, 0xA1, 0xB1) {
+        override private[operation] def addressMode(operationCode: Int): AddressingMode =
+          (operationCode match {
+            case 0xA9 => AddressingModeEnum.IMMEDIATE
+            case 0xA5 => AddressingModeEnum.ZERO_PAGE
+            case 0xB5 => AddressingModeEnum.ZERO_PAGE_X
+            case 0xAD => AddressingModeEnum.ABSOLUTE
+            case 0xBD => AddressingModeEnum.ABSOLUTE_X
+            case 0xB9 => AddressingModeEnum.ABSOLUTE_Y
+            case 0xA1 => AddressingModeEnum.INDIRECT_X
+            case 0xB1 => AddressingModeEnum.INDIRECT_Y
+          }).addressMode
+      }
+
+    val STACK_INSTRUCTIONS =
+      new OperationVal("stack instruction", StackInstruction(), 0x9A, 0xBA, 0x48, 0x68, 0x08, 0x28) {
+        override private[operation] def addressMode(operationCode: Int): AddressingMode =
+          (operationCode match {
+            case 0x9A => AddressingModeEnum.TRANSFER_X_TO_STACK
+            case 0xBA => AddressingModeEnum.TRANSFER_STACK_TO_X
+            case 0x48 => AddressingModeEnum.PUSH_ACCUMULATOR
+            case 0x68 => AddressingModeEnum.PULL_ACCUMULATOR
+            case 0x08 => AddressingModeEnum.PUSH_PROCESSOR_STATUS
+            case 0x28 => AddressingModeEnum.PULL_PROCESSOR_STATUS
+          }).addressMode
+      }
   }
 
   def findOperation(operationCode: Int): Option[(InstructionExecutor, AddressingMode)] =
